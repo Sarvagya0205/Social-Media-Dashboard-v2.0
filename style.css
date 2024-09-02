@@ -210,24 +210,29 @@
 }
 .info1{
     display: flex;
-    justify-content: space-between;
-    font-size: 1.75rem;
-    font-weight: 400;
-    margin: 10px 0;
-    color: #d3D9D4;
-    text-align: right;
-    /* margin-left: 50%; */
+    justify-content: center;
     flex-direction: column;
-    /* justify-content: right; */
-    flex: 2 1 auto;
+    align-items: center;
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-right: 15vw;
+    color: #d3D9D4;
+    /* text-align: right; */
+    /* margin-left: 50%; */
+    /* flex: 2 1 auto; */
+    /* height: fit-content; */
+    height:8vh;
+    width:40vw;
+}
+
+.info1 p{
+    word-spacing: 10px;
 }
 .baap{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-
-
+    /* flex-wrap: wrap; */
+     justify-content: space-between; 
+    align-items: center;
 }
 /* Media query for responsiveness */
 @media (max-width: 768px) {

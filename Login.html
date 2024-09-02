@@ -19,11 +19,11 @@
 
         <label for="password">Password</label>
         <input type="password" placeholder="Password" id="password" class="user">
-        <button type="submit">Login</button>
+        <button type="button" id="redirectButton">Login</button>
     </form>
     <script>
-        document.querySelector('.name').addEventListener('click', function(){
-        window.location.href="";
+        document.querySelector('#redirectButton').addEventListener('click', function(){
+        window.location.href="Index.html"; // redirection issue //
     });
     </script>
 </body>
