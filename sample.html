@@ -28,10 +28,9 @@
             height: 100%;
             color: rgba(221, 216, 216, 0.5);
 
-            font-family: "Nerko One", cursive;
+            font-family: sans-serif;
             font-weight: 4rem;
             font-style: normal;
-            text-shadow:3px 3px 10px rgb(194, 215, 223);
         }
         @keyframes changeBackground {
             0%   { background-image: url('images/img0.jpg'); }
@@ -49,14 +48,10 @@
             padding: 20px;
             background-color: rgba(190, 210, 240, 0.2);
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-            text-shadow:3px 3px 10px rgb(81, 84, 86)
         }
         .feature-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
         }
         .feature-title {
             font-size: 24px;
@@ -66,12 +61,24 @@
             font-size: 16px;
             opacity: 0.8;
         }
+
+        .img{
+            width: 5vw;
+            height: 8vh;
+            border-radius: 38px;
+        }
+        .nav-link{
+            text-decoration: none;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 300;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">MANG</a>
+            <img src="images/m.png" class="img">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -79,17 +86,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="#">Home</a>
+                        <a class="nav-link " aria-current="page" href="Index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Features</a>
+                        <a class="nav-link active" href="sample.html">Features</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="about.html">About Us</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
+                        <a class="nav-link" href="Login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Register.html">Register</a>
                     </li>
                 </ul>
             </div>
