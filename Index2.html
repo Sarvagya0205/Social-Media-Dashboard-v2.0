@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar-menu">
+            <li><a href="Index.html" class="logo"><img src="images/m.png"></a></li>
+            <li class="navbar-item"><a href="#about" class="navbar-link">Dashboard</a></li>
+            <li class="navbar-item"><a href="#services" class="navbar-link">Services</a></li>
+            <li class="navbar-item"><a href="Index.html" class="navbar-link">Home</a></li>
+            <li class="navbar-item profile-section">
+                <a href="#profile" class="navbar-link">
+                    <img src="images/profile-icon.png" alt="Profile" class="profile-icon">
+                    <span id="loggedInUsername">Guest</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <div>
+        <H1 class="intro">Get all social media insights in one place with <h1 class="mang">Mang</h1></H1>
+    </div>
+    <div class="idea_login">
+        <a href="login.html" class="hi">Let's get started<!--<img src="images/light-bulb-6-24.png">--></a>
+    </div>
+    <div class="lappy">
+        <img src="images/laptop.jpg">
+    </div>
+    <div>
+        <h1 class="intro" id="head_second">The magic of Clarity.</h1>
+        <p class="hi" id="second">Mang Analyzes your data and represent all in one place so that you dont have to.</p>
+    </div>
+    <div class="baap">
+     <div class="card1">
+        <img src="images/twigs-near-pot.jpg" alt="" class="card-img">
+        <div class="card-body">
+            <h1 class="card-title">Dashboard</h1>
+            <p class="card-sub-text">Get all your social media insights in one place.</p>
+            <p class="card-info">nneionifosnensf fenoaifnosjfioef sfofnosefinfosf sfjonefinsofnfjfe nfoenoifnsonfosnif nofinsoef</p>
+        </div>
+     </div>
+     <div class="info1">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit eius iste laboriosam nobis, magni nostrum reprehenderit! Veritatis minus fuga architecto ipsam mollitia expedita illo ipsa cum hic aperiam, itaque enim.</p>
+     </div>
+     <div class="card2">
+        <div class="card-img">
+            <img src="images/shiny-night-city.jpg" alt="Card Image">
+        </div>
+        <div class="card-body">
+            <div class="card-title">Title</div>
+            <div class="card-sub-text">Subtitle</div>
+            <div class="card-info">Some information here</div>
+        </div>
+    </div>
+    </div>
+    
+</body>
+<script>
+    let loggedInUser = localStorage.getItem('loggedInUser');
+
+    if (loggedInUser) {
+        document.getElementById('loggedInUsername').textContent = loggedInUser;
+    } else {
+        document.getElementById('loggedInUsername').textContent = "Guest";
+    }
+
+
+</script>
+</html>

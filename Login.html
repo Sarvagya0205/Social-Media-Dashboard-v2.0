@@ -7,24 +7,43 @@
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
     <form>
         <h3>LOGIN</h3>
 
         <label for="username">Username</label>
-        <input type="text" placeholder="Email or Phone" id="username" class="user">
+        <input type="text" name="username" placeholder="Email or Phone" id="username" class="user" required>
 
         <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password" class="user">
-        <button type="submit">Login</button>
+        <input type="password" name="password" placeholder="Password" id="password" class="user" required>
+
+        <button type="button" id="loginButton">Login</button>
     </form>
+
     <script>
-        document.querySelector('.name').addEventListener('click', function(){
-        window.location.href="";
-    });
+        document.getElementById('loginButton').addEventListener('click', function () {
+            // Get user input values
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            // Retrieve the stored email and password from localStorage
+            let storedEmail = localStorage.getItem('email');
+            let storedPassword = localStorage.getItem('password');
+
+            // Check if fields are empty
+            if (username === "" || password === "") {
+                window.alert("Please fill in the required details");
+            } else if (username === storedEmail && password === storedPassword) {
+                // If credentials match, store the logged-in user's name in localStorage
+                localStorage.setItem('loggedInUser', username);
+                
+                // Redirect to the home page
+                window.alert("Login successful!");
+                window.location.href = "Index2.html"; // Replace with actual home page link
+            } else {
+                // If credentials don't match, show an error
+                window.alert("Invalid email or password. Please try again.");
+            }
+        });
     </script>
 </body>
 </html>
