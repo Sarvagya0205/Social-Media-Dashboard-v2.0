@@ -9,7 +9,6 @@
 <body>
     <form>
         <h3>LOGIN</h3>
-
         <label for="username">Username</label>
         <input type="text" name="username" placeholder="Email or Phone" id="username" class="user" required>
 
@@ -17,9 +16,13 @@
         <input type="password" name="password" placeholder="Password" id="password" class="user" required>
 
         <button type="button" id="loginButton">Login</button>
+
+     
+
     </form>
 
     <script>
+
         document.getElementById('loginButton').addEventListener('click', function () {
             // Get user input values
             let username = document.getElementById('username').value;
@@ -44,6 +47,10 @@
                 window.alert("Invalid email or password. Please try again.");
             }
         });
+
+    
+   
+
     </script>
 </body>
 </html>
