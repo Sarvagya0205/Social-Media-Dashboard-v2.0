@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="style copy.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container-xl">
@@ -40,22 +40,45 @@
         </ul>
     </div>
     <div class="container">
-            <h1>WELCOME</h1>
-            <button id="newflag"><font size="2px" color="white">Sign with</font> <span><img src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA" alt=""><font size="2px" color="white">Google</font></span></button>
-            <div class="hoz">
-                <hr>
-                <span>or</span>
-                <hr>
-            </div>
-            <form  class= "media">
-                <input type="text" placeholder="Enter email address">
-                <button type="button" id="flag">Continue</button>
-            </form>
+        <h1>WELCOME</h1>
+        <button id="newflag">
+            <font size="2px" color="white">Sign with</font>
+            <span><img src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA" alt="">
+                <font size="2px" color="white">Google</font>
+            </span>
+        </button>
+        <div class="hoz">
+            <hr>
+            <span>or</span>
+            <hr>
+        </div>
+        <form class="media">
+            <input type="email" name="email" placeholder="Enter email address" id="flg" required>
+            <button type="button" id="flag">Continue</button>
+        </form>
     </div>
     <script>
-        document.querySelector('#flag').addEventListener('click',function(){
-            window.location.href="password.html";
+        document.getElementById('flag').addEventListener('click', function () {
+            let email = document.getElementById('flg').value;
+
+            if (email === "") {
+                window.alert("Please fill in the required details");
+            } else if (!validateEmail(email)) {
+                window.alert("Please input a valid email");
+            } else {
+                // Store the email in localStorage
+                localStorage.setItem('email', email);
+
+                // Redirect to password.html
+                window.location.href = "password.html";
+            }
         });
+
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(String(email).toLowerCase());
+        }
     </script>
 </body>
 </html>
