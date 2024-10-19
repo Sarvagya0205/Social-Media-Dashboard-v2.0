@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": "594c",
+      "email": "uttkarshpahuja@gmail.com",
+      "password": "Uttkarsh"
+    },
+    {
+      "id": "ee41",
+      "email": "sarv5002@gmail.com",
+      "password": "sarvuu"
+    },
+    {
+      "id": "e3e3",
+      "email": "athrv@gmail.com",
+      "password": "athrv@123"
+    },
+    {
+      "id": "aabc",
+      "email": "arsh12@gmail.com",
+      "password": "arsh123@321"
+    }
+  ]
+}
