@@ -43,7 +43,8 @@
         <h1>WELCOME</h1>
         <button id="newflag">
             <font size="2px" color="white">Sign with</font>
-            <span><img src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA" alt="">
+            <span>
+                <img src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA" alt="">
                 <font size="2px" color="white">Google</font>
             </span>
         </button>
@@ -52,33 +53,87 @@
             <span>or</span>
             <hr>
         </div>
-        <form class="media">
+        <form id="signupForm" class="media">
             <input type="email" name="email" placeholder="Enter email address" id="flg" required>
-            <button type="button" id="flag">Continue</button>
+            <button type="submit" id="flag">Continue</button>
         </form>
     </div>
+
     <script>
-        document.getElementById('flag').addEventListener('click', function () {
-            let email = document.getElementById('flg').value;
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+        event.preventDefault(); 
 
-            if (email === "") {
-                window.alert("Please fill in the required details");
-            } else if (!validateEmail(email)) {
-                window.alert("Please input a valid email");
-            } else {
-                // Store the email in localStorage
-                localStorage.setItem('email', email);
+        let email = document.getElementById('flg').value;
 
-                // Redirect to password.html
-                window.location.href = "password.html";
-            }
-        });
+        if (email === "") {
+            window.alert("Please fill in the required details");
+        } else if (!validateEmail(email)) {
+            window.alert("Please input a valid email");
+        } else {
+           
+            fetch(`http://localhost:3000/users?email=${email}`)
+                .then(response => response.json())
+                .then(existingUsers => {
+                    if (existingUsers.length > 0) {
+                        window.alert("This email is already registered. Please use a different email.");
+                    } else {
+                        
+                        localStorage.setItem('email', email);
 
-        // Email validation function
-        function validateEmail(email) {
-            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            return re.test(String(email).toLowerCase());
+                        
+                        window.location.href = 'password.html';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error checking existing users:', error);
+                    alert('An error occurred while checking for existing accounts.');
+                });
         }
+    });
+
+
+    function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    // Check if the email is in the correct format
+    if (!re.test(String(email).toLowerCase())) {
+        return false;
+    }
+
+    // Split the email into parts to further validate the domain
+    const emailParts = email.split('@');
+    
+    if (emailParts.length !== 2) {
+        return false;
+    }
+    
+    // Check if the domain part contains valid labels
+    const domain = emailParts[1];
+    const domainParts = domain.split('.');
+    
+    // Ensure the domain contains at least one dot
+    if (domainParts.length < 2) {
+        return false;
+    }
+    
+    // Check for each part of the domain
+    for (let part of domainParts) {
+        // Each part must be at least 2 characters long and not start or end with a hyphen
+        if (part.length < 2 || part.startsWith('-') || part.endsWith('-')) {
+            return false;
+        }
+        
+        // Each part should only contain valid characters
+        if (!/^[a-zA-Z0-9-]+$/.test(part)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
     </script>
 </body>
 </html>

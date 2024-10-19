@@ -7,50 +7,52 @@
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-    <form>
+    <form id="loginForm">
         <h3>LOGIN</h3>
-        <label for="username">Username</label>
-        <input type="text" name="username" placeholder="Email or Phone" id="username" class="user" required>
+
+        <label for="username">Email</label>
+        <input type="email" name="email" placeholder="Email or Phone" id="email" class="user" required>
 
         <label for="password">Password</label>
         <input type="password" name="password" placeholder="Password" id="password" class="user" required>
 
-        <button type="button" id="loginButton">Login</button>
-
-     
-
+        <button type="submit" id="loginButton">Login</button>
     </form>
 
     <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
 
-        document.getElementById('loginButton').addEventListener('click', function () {
-            // Get user input values
-            let username = document.getElementById('username').value;
-            let password = document.getElementById('password').value;
+           
+            let email = document.getElementById('email').value.trim();
+            let password = document.getElementById('password').value.trim();
 
-            // Retrieve the stored email and password from localStorage
-            let storedEmail = localStorage.getItem('email');
-            let storedPassword = localStorage.getItem('password');
-
-            // Check if fields are empty
-            if (username === "" || password === "") {
-                window.alert("Please fill in the required details");
-            } else if (username === storedEmail && password === storedPassword) {
-                // If credentials match, store the logged-in user's name in localStorage
-                localStorage.setItem('loggedInUser', username);
-                
-                // Redirect to the home page
-                window.alert("Login successful!");
-                window.location.href = "Index2.html"; // Replace with actual home page link
-            } else {
-                // If credentials don't match, show an error
-                window.alert("Invalid email or password. Please try again.");
+            if (email === "" || password === "") {
+                window.alert("Please fill in both fields.");
+                return;
             }
+
+            
+            fetch('http://localhost:3000/users')
+                .then(response => response.json())
+                .then(users => {
+                    
+                    const user = users.find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
+
+                    if (user) {
+                       
+                        window.alert("Login successful!");
+                        window.location.href = "Index.html"; 
+                    } else {
+                        
+                        window.alert("Invalid email or password. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                    window.alert("An error occurred while trying to log in. Please try again later.");
+                });
         });
-
-    
-   
-
     </script>
 </body>
 </html>
