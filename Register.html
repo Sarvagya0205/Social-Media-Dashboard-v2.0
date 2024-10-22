@@ -95,35 +95,30 @@
     function validateEmail(email) {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     
-    // Check if the email is in the correct format
+   
     if (!re.test(String(email).toLowerCase())) {
         return false;
     }
-
-    // Split the email into parts to further validate the domain
+    
     const emailParts = email.split('@');
     
     if (emailParts.length !== 2) {
         return false;
     }
     
-    // Check if the domain part contains valid labels
     const domain = emailParts[1];
     const domainParts = domain.split('.');
-    
-    // Ensure the domain contains at least one dot
+
     if (domainParts.length < 2) {
         return false;
     }
     
-    // Check for each part of the domain
     for (let part of domainParts) {
-        // Each part must be at least 2 characters long and not start or end with a hyphen
+     
         if (part.length < 2 || part.startsWith('-') || part.endsWith('-')) {
             return false;
         }
         
-        // Each part should only contain valid characters
         if (!/^[a-zA-Z0-9-]+$/.test(part)) {
             return false;
         }
