@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- styling -->
-     <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="dashboard.css">
      <!-- font -->
      <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
      <!-- icons -->
@@ -100,7 +100,7 @@
 
                                 <div class="card">
                                     <i class="fab fa-youtube social-icon"></i>
-                                    <h1 class="count">510k</h1>
+                                    <h1 class="count" id="subs">Loading...</h1>
                                     <small>Subscribers</small>
                                     <div class="dropdown">
                                         <button class="btn btn-more">
@@ -183,8 +183,8 @@
                             <div class="chart-detail">
                                 <div class="detail-wrapper">
                                     <i class="fas fa-theater-masks"></i>
-                                    <p>Impression</p>
-                                    <h3 class="detail-num">3400k <span class="up-down green">+64%</span></h3>
+                                    <p>Views</p>
+                                    <h3 class="detail-num" id="views"><span class="up-down green">+64%</span></h3>
                                 </div>
                                 <hr class="divider">
                                 <div class="detail-wrapper">
@@ -202,7 +202,7 @@
                                 <div class="detail-wrapper">
                                     <i class="fas fa-shapes"></i>
                                     <p>Likes</p>
-                                    <h3 class="detail-num">478 <span class="up-down green">+7%</span></h3>
+                                    <h3 class="detail-num" id="likes"><span class="up-down green">+7%</span></h3>
                                 </div>
                                 <hr class="divider">
 
@@ -258,7 +258,9 @@
                                         <td>67k</td>
                                         <td><button class="btn btn-table">Details</button></td>
                                     </tr>
-
+                                    <tbody id="recent-uploads">
+                                        <!-- Dynamic uploads-->
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -270,4 +272,151 @@
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="app.js"></script>
+<script>
+   let params = {};
+        let regex = /([^&=]+)=([^&]*)/g, m;
+
+        // Parsing the access token from the URL
+        while (m = regex.exec(location.href)) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+
+        // Storing the access token in local storage
+        if (Object.keys(params).length > 0) {
+            localStorage.setItem('authInfo', JSON.stringify(params));
+        }
+
+        // Hide the access token from the URL
+        window.history.pushState({}, document.title, "/API/dashboard.html");
+
+        // Getting the access token from local storage
+        let info = JSON.parse(localStorage.getItem('authInfo'));
+        if (!info || !info['access_token']) {
+            console.error('No valid access token found');
+            logout(); // Log out if no access token is found
+        } else {
+            console.log(info);
+            console.log(info['access_token']);
+
+            // Check access token validity
+            fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + info['access_token'])
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid access token');
+                    }
+                    return response.json();
+                })
+                .then(tokenInfo => {
+                    console.log('Token Info:', tokenInfo);
+
+                    // Fetch user profile information
+                    fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + info['access_token'])
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch user info');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+
+                            // Fetch YouTube channel statistics
+                            fetch('https://www.googleapis.com/youtube/v3/channels?part=statistics&mine=true&access_token=' + info['access_token'] + '&key=AIzaSyDmZVbhNpDSlLN1jbbLXiONpc_kidIA20s')
+                                .then(response => {
+                                    if (!response.ok) {
+                                        return response.json().then(err => {
+                                            throw new Error('Failed to fetch YouTube channel info: ' + err.error.message);
+                                        });
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log(data);
+                                    if (data.items && data.items.length > 0) {
+                                        let subscriberCount = data.items[0].statistics.subscriberCount;
+                                        let viewCount = data.items[0].statistics.viewCount;
+                                        let subsElement = document.getElementById('subs');
+                                        let viewsElement = document.getElementById('views');
+                                        if (subsElement) {
+                                            subsElement.innerText = subscriberCount;
+                                        } else {
+                                            console.error('Element with id "subs" not found');
+                                        }
+                                        if (viewsElement) {
+                                            viewsElement.innerText = viewCount;
+                                        } else {
+                                            console.error('Element with id "views" not found');
+                                        }
+
+                                        // Fetch recent uploads
+                                        fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=' + data.items[0].id + '&maxResults=5&order=date&type=video&access_token=' + info['access_token'] + '&key=AIzaSyDmZVbhNpDSlLN1jbbLXiONpc_kidIA20s')
+                                            .then(response => {
+                                                if (!response.ok) {
+                                                    return response.json().then(err => {
+                                                        throw new Error('Failed to fetch recent uploads: ' + err.error.message);
+                                                    });
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(uploadData => {
+                                                console.log(uploadData);
+                                                let uploadsElement = document.getElementById('recent-uploads');
+                                                if (uploadsElement) {
+                                                    uploadsElement.innerHTML = ''; // Clear existing content
+                                                    uploadData.items.forEach(video => {
+                                                        // Fetch video statistics
+                                                        fetch('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=' + video.id.videoId + '&access_token=' + info['access_token'] + '&key=AIzaSyDmZVbhNpDSlLN1jbbLXiONpc_kidIA20s')
+                                                            .then(response => {
+                                                                if (!response.ok) {
+                                                                    return response.json().then(err => {
+                                                                        throw new Error('Failed to fetch video statistics: ' + err.error.message);
+                                                                    });
+                                                                }
+                                                                return response.json();
+                                                            })
+                                                            .then(videoData => {
+                                                                console.log(videoData);
+                                                                if (videoData.items && videoData.items.length > 0) {
+                                                                    let videoStats = videoData.items[0].statistics;
+                                                                    let row = document.createElement('tr');
+                                                                    row.innerHTML = `
+                                                                        <td class="table-title">
+                                                                            <img src="${video.snippet.thumbnails.default.url}" alt="table-image" class="table-image">
+                                                                            <p>${video.snippet.title}</p>
+                                                                        </td>
+                                                                        <td>${new Date(video.snippet.publishedAt).toLocaleDateString()}</td>
+                                                                        <td>${videoStats.viewCount}</td>
+                                                                        <td>${videoStats.commentCount}</td>
+                                                                        <td>${videoStats.likeCount}</td>
+                                                                        <td><button class="btn btn-table">Details</button></td>
+                                                                    `;
+                                                                    uploadsElement.appendChild(row);
+                                                                }
+                                                            })
+                                                            .catch(error => console.error('Error fetching video statistics:', error));
+                                                    });
+                                                } else {
+                                                    console.error('Element with id "recent-uploads" not found');
+                                                }
+                                            })
+                                            .catch(error => console.error('Error fetching recent uploads:', error));
+                                    } else {
+                                        throw new Error('No channel data found');
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching YouTube channel info:', error));
+                        })
+                        .catch(error => console.error('Error fetching user info:', error));
+                })
+                .catch(error => {
+                    console.error('Error validating access token:', error);
+                    logout(); // Log out if the access token is invalid
+                });
+        }
+
+        function logout() {
+            localStorage.removeItem('authInfo');
+            window.location.href = '/index.html'; // Redirect to the login page or home page
+        }
+</script>
 </html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>WELCOME TO YOUTUBE PAGE</h1>
+    <h2 id="name">Your full name is:</h2>
+    <img id="image" src="" alt="Profile Image">
+    <h2 id="subs">Your subscribers count:</h2>
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        let params = {};
+        let regex = /([^&=]+)=([^&]*)/g, m;
+
+        // Parsing the access token from the URL
+        while (m = regex.exec(location.href)) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+
+        // Storing the access token in local storage
+        if (Object.keys(params).length > 0) {
+            localStorage.setItem('authInfo', JSON.stringify(params));
+        }
+
+        // Hide the access token from the URL
+        window.history.pushState({}, document.title, "/API/home.html");
+
+        // Getting the access token from local storage
+        let info = JSON.parse(localStorage.getItem('authInfo'));
+        console.log(info);
+        console.log(info['access_token']);
+
+        if (info && info['access_token']) {
+            // Check access token validity
+            fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + info['access_token'])
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid access token');
+                    }
+                    return response.json();
+                })
+                .then(tokenInfo => {
+                    console.log('Token Info:', tokenInfo);
+
+                    // Fetch user profile information
+                    fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + info['access_token'])
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch user info');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            document.getElementById('name').innerText = 'Your full name is: ' + data.name;
+                            document.getElementById('image').src = data.picture;
+
+                            // Fetch YouTube channel statistics
+                            fetch('https://www.googleapis.com/youtube/v3/channels?part=statistics&mine=true&access_token=' + info['access_token'] + '&key=AIzaSyDmZVbhNpDSlLN1jbbLXiONpc_kidIA20s')
+                                .then(response => {
+                                    if (!response.ok) {
+                                        return response.json().then(err => {
+                                            throw new Error('Failed to fetch YouTube channel info: ' + err.error.message);
+                                        });
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log(data);
+                                    if (data.items && data.items.length > 0) {
+                                        let subscriberCount = data.items[0].statistics.subscriberCount;
+                                        document.getElementById('subs').innerText = 'Your subscribers count: ' + subscriberCount;
+                                    } else {
+                                        throw new Error('No channel data found');
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching YouTube channel info:', error));
+                        })
+                        .catch(error => console.error('Error fetching user info:', error));
+                })
+                .catch(error => {
+                    console.error('Error validating access token:', error);
+                    logout(); // Log out if the access token is invalid
+                });
+        } else {
+            console.error('No valid access token found');
+            logout(); // Log out if no access token is found
+        }
+
+        function logout() {
+            localStorage.removeItem('authInfo');
+            window.location.href = '/index.html'; // Redirect to the login page or home page
+        }
+    </script>
+</body>
+</html>
