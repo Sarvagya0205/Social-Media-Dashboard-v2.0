@@ -94,7 +94,7 @@
 
 
     function validateEmail(email) {
-    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
     
    
     if (!re.test(String(email).toLowerCase())) {
@@ -120,7 +120,7 @@
             return false;
         }
         
-        if (!/^[a-zA-Z0-9-]+$/.test(part)) {
+        if (!/^[a-zA-Z]+$/.test(part)) {
             return false;
         }
     }
