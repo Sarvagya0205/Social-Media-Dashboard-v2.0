@@ -42,7 +42,8 @@
                     if (user) {
                        
                         window.alert("Login successful!");
-                        window.location.href = "Index.html"; 
+                        localStorage.setItem('loggedInUserEmail', user.email);
+                        window.location.href = "Index2.html"; 
                     } else {
                         
                         window.alert("Invalid email or password. Please try again.");

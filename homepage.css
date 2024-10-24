@@ -9,6 +9,20 @@ body{
     font-family: "Arima", system-ui;
 
 }
+
+.profile-icon {
+    background-color: #6c757d; /* Grey background */
+    color: white; /* White text */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* Make it circular */
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .topnav{
     box-shadow: 0 5px 20px rgba(80, 79, 79, 0.4);
 }
