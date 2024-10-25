@@ -17,7 +17,7 @@
     <!-- Navbar -->
       <nav class="navbar">
         <div class="nav-left">
-            <i class="menu-btn fas fa-bars"></i>
+            <!-- <i class="menu-btn fas fa-bars"></i> -->
             <h2 class="logo">DASHBOARD</h2>
         </div>
 
@@ -36,9 +36,8 @@
             <!-- sidebar -->
              <div class="sidebar">
                 <div class="profile">
-                    <img src="" alt="profile-image" class="profile-image">
-                    <h3>write something name of creator</h3>
-                    <p>Content Creator</p>
+                    <img src="" alt="profile-image" class="profile-image" id="image_1">
+                    <h3 id="name_1"></h3>
                 </div>
                 <div class="menu">
                     <div class="menu-detail menu-active"> 
@@ -154,7 +153,7 @@
 
 
                         </div>
-                        <div class="wrapper">
+                        <!-- <div class="wrapper">
                             <div class="card">
                                 <div class="title-wrapper">
                                     <h3 class="title">Trend Data</h3>
@@ -172,7 +171,7 @@
                             </div>
                         </div>
 
-                 </div>
+                 </div> -->
                  <!-- Right -->
                   <div class="right-container">
                         <div class="card">
@@ -202,7 +201,7 @@
                                 <div class="detail-wrapper">
                                     <i class="fas fa-shapes"></i>
                                     <p>Likes</p>
-                                    <h3 class="detail-num" id="likes"><span class="up-down green">+7%</span></h3>
+                                    <h3 class="detail-num" id="likes">Loading...<span class="up-down green"></span></h3>
                                 </div>
                                 <hr class="divider">
 
@@ -224,39 +223,6 @@
                                         <th>Comments</th>
                                         <th>Likes</th>
                                         <th>More</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-title">
-                                            <img src="" alt="table-image" class="table-image">
-                                            <p>Lorem ipsum dolor sit amet.</p>
-                                        </td>
-                                        <td>Dec 11,2021</td>
-                                        <td>280k</td>
-                                        <td>151</td>
-                                        <td>70k</td>
-                                        <td><button class="btn btn-table">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-title">
-                                            <img src="" alt="table-image2" class="table-image">
-                                            <p>Lorem ipsum dolor sit amet.</p>
-                                        </td>
-                                        <td> Jan 25,2022</td>
-                                        <td>32k</td>
-                                        <td>10</td>
-                                        <td>465</td>
-                                        <td><button class="btn btn-table">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-title">
-                                            <img src="" alt="table-image3" class="table-image">
-                                            <p>Lorem ipsum dolor sit amet.</p>
-                                        </td>
-                                        <td>Feb 06,2022</td>
-                                        <td>120k</td>
-                                        <td>342</td>
-                                        <td>67k</td>
-                                        <td><button class="btn btn-table">Details</button></td>
                                     </tr>
                                     <tbody id="recent-uploads">
                                         <!-- Dynamic uploads-->
@@ -418,5 +384,17 @@
             localStorage.removeItem('authInfo');
             window.location.href = '/index.html'; // Redirect to the login page or home page
         }
+        fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + info['access_token'])
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch user info');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            document.getElementById('name_1').innerText = data.name;
+                            document.getElementById('image_1').src = data.picture;
+                        })
 </script>
 </html>
